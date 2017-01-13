@@ -3,6 +3,8 @@ package nucleus.view;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import nucleus.factory.PresenterFactory;
 import nucleus.factory.PresenterStorage;
@@ -41,7 +43,7 @@ public final class PresenterLifecycleDelegate<P extends Presenter> {
      */
     public void setPresenterFactory(@Nullable PresenterFactory<P> presenterFactory) {
         if (presenter != null)
-            throw new IllegalArgumentException("setPresenterFactory() should be called before onResume()");
+            throw new IllegalArgumentException("setPresenterFactory() should be called before onCreate()");
         this.presenterFactory = presenterFactory;
     }
 
@@ -83,16 +85,16 @@ public final class PresenterLifecycleDelegate<P extends Presenter> {
      */
     public void onRestoreInstanceState(Bundle presenterState) {
         if (presenter != null)
-            throw new IllegalArgumentException("onRestoreInstanceState() should be called before onResume()");
+            throw new IllegalArgumentException("onRestoreInstanceState() should be called before onCreate()");
         this.bundle = ParcelFn.unmarshall(ParcelFn.marshall(presenterState));
     }
 
     /**
-     * {@link android.app.Activity#onResume()},
-     * {@link android.app.Fragment#onResume()},
+     * {@link android.app.Activity#onCreate(Bundle)},
+     * {@link android.app.Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)},
      * {@link android.view.View#onAttachedToWindow()}
      */
-    public void onResume(Object view) {
+    public void onCreate(Object view) {
         getPresenter();
         if (presenter != null && !presenterHasView) {
             //noinspection unchecked

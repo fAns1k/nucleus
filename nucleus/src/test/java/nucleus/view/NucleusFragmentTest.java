@@ -77,7 +77,7 @@ public class NucleusFragmentTest {
         tested = spy(VIEW_CLASS);
         suppress(method(BASE_VIEW_CLASS, "onCreate", Bundle.class));
         suppress(method(BASE_VIEW_CLASS, "onSaveInstanceState", Bundle.class));
-        suppress(method(BASE_VIEW_CLASS, "onResume"));
+        suppress(method(BASE_VIEW_CLASS, "onCreate"));
         suppress(method(BASE_VIEW_CLASS, "onPause"));
         suppress(method(BASE_VIEW_CLASS, "onDestroyView"));
         suppress(method(BASE_VIEW_CLASS, "onDestroy"));
@@ -104,7 +104,7 @@ public class NucleusFragmentTest {
     public void testLifecycle() throws Exception {
         tested.onCreate(null);
         tested.onResume();
-        verify(mockDelegate, times(1)).onResume(tested);
+        verify(mockDelegate, times(1)).onCreate(tested);
         tested.onPause();
         tested.onDestroyView();
         verify(mockDelegate, times(1)).onDropView();

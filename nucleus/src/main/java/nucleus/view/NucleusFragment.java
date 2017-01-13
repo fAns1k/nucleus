@@ -2,6 +2,7 @@ package nucleus.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.View;
 
 import nucleus.factory.PresenterFactory;
 import nucleus.factory.ReflectionPresenterFactory;
@@ -40,7 +41,7 @@ public abstract class NucleusFragment<P extends Presenter> extends Fragment impl
     /**
      * Returns a current attached presenter.
      * This method is guaranteed to return a non-null value between
-     * onResume/onPause and onAttachedToWindow/onDetachedFromWindow calls
+     * onCreate/onPause and onAttachedToWindow/onDetachedFromWindow calls
      * if the presenter factory returns a non-null value.
      *
      * @return a currently attached presenter or null.
@@ -57,21 +58,21 @@ public abstract class NucleusFragment<P extends Presenter> extends Fragment impl
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenterDelegate.onCreate(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        presenterDelegate.onDropView();
+        super.onDestroyView();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenterDelegate.onResume(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        presenterDelegate.onDropView();
     }
 
     @Override
