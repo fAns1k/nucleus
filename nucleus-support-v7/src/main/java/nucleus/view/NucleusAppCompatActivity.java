@@ -2,6 +2,7 @@ package nucleus.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import nucleus.factory.PresenterFactory;
@@ -59,25 +60,20 @@ public abstract class NucleusAppCompatActivity<P extends Presenter> extends AppC
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        presenterDelegate.onResume(this);
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState());
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        presenterDelegate.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        presenterDelegate.onDropView();
-    }
-
-    @Override
     protected void onDestroy() {
+        presenterDelegate.onDropView();
         super.onDestroy();
         presenterDelegate.onDestroy(!isChangingConfigurations());
     }
