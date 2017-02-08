@@ -1,7 +1,9 @@
 package nucleus.view;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import nucleus.factory.PresenterFactory;
 import nucleus.factory.ReflectionPresenterFactory;
@@ -18,7 +20,7 @@ public abstract class NucleusSupportFragment<P extends Presenter> extends Fragme
 
     private static final String PRESENTER_STATE_KEY = "presenter_state";
     private PresenterLifecycleDelegate<P> presenterDelegate =
-        new PresenterLifecycleDelegate<>(ReflectionPresenterFactory.<P>fromViewClass(getClass()));
+            new PresenterLifecycleDelegate<>(ReflectionPresenterFactory.<P>fromViewClass(getClass()));
 
     /**
      * Returns a current presenter factory.
@@ -57,21 +59,21 @@ public abstract class NucleusSupportFragment<P extends Presenter> extends Fragme
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenterDelegate.onCreate(this);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState());
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        presenterDelegate.onResume(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroyView() {
         presenterDelegate.onDropView();
+        super.onDestroyView();
     }
 
     @Override

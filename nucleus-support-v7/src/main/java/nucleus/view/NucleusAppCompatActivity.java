@@ -62,7 +62,7 @@ public abstract class NucleusAppCompatActivity<P extends Presenter> extends AppC
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        presenterDelegate.onResume(this);
+        presenterDelegate.onCreate(this);
     }
 
     @Override

@@ -20,7 +20,7 @@ configurations {
 
 dependencies {
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile "info.android15.nucleus:nucleus:$VERSION_NAME"
+    compile "com.github.fAns1k.nucleus:nucleus:1.1"
     compileJavadoc "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compileJavadoc "info.android15.nucleus:nucleus:$VERSION_NAME"
 }

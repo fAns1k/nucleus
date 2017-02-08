@@ -59,25 +59,20 @@ public abstract class NucleusFragmentActivity<P extends Presenter> extends Fragm
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        presenterDelegate.onCreate(this);
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState());
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        presenterDelegate.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        presenterDelegate.onDropView();
-    }
-
-    @Override
     protected void onDestroy() {
+        presenterDelegate.onDropView();
         super.onDestroy();
         presenterDelegate.onDestroy(!isChangingConfigurations());
     }
